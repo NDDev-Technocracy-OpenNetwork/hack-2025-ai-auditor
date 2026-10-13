@@ -12,6 +12,8 @@ concurrency:
 
 jobs:
   backend:
+    permissions:
+      contents: read
     name: backend (python)
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/python-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
@@ -22,6 +24,8 @@ jobs:
       test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
 
   frontend:
+    permissions:
+      contents: read
     name: frontend (node)
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/node-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
@@ -30,27 +34,49 @@ jobs:
       npm_version: "11.19.0"
       working_directory: frontend
       install_command: 'npm ci --no-audit'
-      test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
+      test_command: "npm run lint && npm run build"
 
   codeql:
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-codeql.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
       languages: '["python","javascript","actions"]'
 
   scorecard:
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-scorecard.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   dependency-review:
+    permissions:
+      contents: read
+      pull-requests: write
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-dependency-review.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   zizmor:
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/zizmor-sarif.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   secret-scan:
+    permissions:
+      contents: read
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/secret-scan.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   actionlint:
+    permissions:
+      contents: read
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/actionlint.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   semgrep:
+    permissions:
+      contents: read
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/semgrep-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
