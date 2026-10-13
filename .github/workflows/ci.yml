@@ -18,8 +18,8 @@ jobs:
       uv_version: "0.12.23"
       python_version: '3.11'
       working_directory: backend
-      install_command: 'uv pip install --system -r requirements.txt ruff pytest'
-      test_command: 'ruff check . && python -m pytest -q'
+      install_command: 'uv venv --python 3.11 .venv && uv pip install --python .venv/bin/python -r requirements.txt ruff pytest'
+      test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
 
   frontend:
     name: frontend (node)
@@ -30,7 +30,7 @@ jobs:
       npm_version: "11.19.0"
       working_directory: frontend
       install_command: 'npm ci --no-audit'
-      test_command: 'npm run lint && npm run build'
+      test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
 
   codeql:
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-codeql.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
