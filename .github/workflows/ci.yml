@@ -57,6 +57,7 @@ jobs:
     uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-scorecard.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   dependency-review:
+    if: github.event_name == 'pull_request'
     permissions:
       contents: read
       pull-requests: write
