@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -21,7 +23,7 @@ jobs:
       python_version: '3.11'
       working_directory: backend
       install_command: 'uv pip install -r requirements.txt ruff pytest'
-      test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
+      test_command: "python -m ruff check . && python -m pytest -q"
 
   frontend:
     permissions:
@@ -46,6 +48,7 @@ jobs:
       languages: '["python","javascript","actions"]'
 
   scorecard:
+    if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     permissions:
       security-events: write
       id-token: write
