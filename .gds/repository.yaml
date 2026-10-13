@@ -7,24 +7,24 @@ repository:
   lifecycle: active
 provider:
   type: github
-  installation: installation:github-nddev-technocracy-opennetwork
+  installation: installation:github-personal
   repository_id: 1039009224
-  owner: NDDev-Technocracy-OpenNetwork
+  owner: rldyourmnd
   name: hack-2025-ai-auditor
   aliases:
-  - owner: rldyourmnd
-    name: hack-2025-ai-auditor
   - owner: NDDev-Technocracy-Archive
+    name: hack-2025-ai-auditor
+  - owner: NDDev-Technocracy-OpenNetwork
     name: hack-2025-ai-auditor
 classification:
   portfolios:
-  - portfolio:nddev-technocracy-opennetwork
+  - portfolio:rldyourmnd
   visibility_contract: public
   data_classification: public
 policy:
   profiles:
   - repository-default
-  - organization-default
+  - personal-default
   rollout_ring: standard
 git:
   default_branch: main
