@@ -2,4 +2,7 @@ packages:
   - "packages/*"
   - "apps/*"
 
-
+# Supply-chain controls for the retained pnpm workspaces.
+blockExoticSubdeps: true
+minimumReleaseAge: 10080
+trustPolicy: no-downgrade
