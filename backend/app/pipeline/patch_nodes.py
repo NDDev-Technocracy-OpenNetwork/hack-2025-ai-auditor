@@ -155,7 +155,7 @@ def _generate_vocab_patches(vocab_changes: list[str]) -> list[Patch]:
 
 
 async def _generate_contradiction_patches(
-    content: str, contradictions: list[dict[str, Any]]
+    content: str, contradictions: list[dict[str, Any]]  # noqa: ARG001 - retained caller contract
 ) -> list[Patch]:
     """Generate patches to resolve contradictions."""
     patches = []

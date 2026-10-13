@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Editor } from '@monaco-editor/react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +23,7 @@ export default function AnalyzePage() {
   const [selectedPatches, setSelectedPatches] = useState<string[]>([]);
 
   // Helper function to safely format numbers
-  const formatNumber = (value: any, decimals: number = 1): string => {
+  const formatNumber = (value: unknown, decimals: number = 1): string => {
     if (typeof value === 'number' && !isNaN(value)) {
       return value.toFixed(decimals);
     }

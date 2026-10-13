@@ -1,5 +1,5 @@
 import logging
-from typing import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Generator
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -80,7 +80,11 @@ async def init_db():
     """Initialize database with initial data if needed."""
     try:
         # Import models to register them
-        from app.models.prompts import AnalysisResult, Prompt, PromptRelation
+        from app.models.prompts import (  # noqa: F401 - model registration
+            AnalysisResult,
+            Prompt,
+            PromptRelation,
+        )
 
         # Create tables
         create_tables()
@@ -114,7 +118,7 @@ class DatabaseManager:
         """Get current number of database sessions."""
         try:
             return async_engine.pool.size()
-        except:
+        except Exception:
             return 0
 
     @staticmethod

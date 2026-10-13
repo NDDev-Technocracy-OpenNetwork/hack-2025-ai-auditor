@@ -20,7 +20,6 @@ export default function PromptBasePage() {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   // Mock data for demo
   useEffect(() => {

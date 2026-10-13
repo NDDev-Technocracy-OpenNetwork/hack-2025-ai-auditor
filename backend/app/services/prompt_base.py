@@ -3,7 +3,6 @@
 import logging
 import uuid
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
@@ -49,7 +48,7 @@ class PromptBaseService:
             logger.error(f"Unexpected error creating prompt: {e}")
             raise
 
-    async def get_prompt(self, prompt_id: str) -> Optional[PromptRead]:
+    async def get_prompt(self, prompt_id: str) -> PromptRead | None:
         """Get a prompt by ID."""
         try:
             with SessionLocal() as session:
@@ -66,7 +65,7 @@ class PromptBaseService:
 
     async def update_prompt(
         self, prompt_id: str, update_data: PromptUpdate
-    ) -> Optional[PromptRead]:
+    ) -> PromptRead | None:
         """Update an existing prompt."""
         try:
             with SessionLocal() as session:
@@ -117,9 +116,9 @@ class PromptBaseService:
         self,
         skip: int = 0,
         limit: int = 100,
-        tags: Optional[list[str]] = None,
-        language: Optional[str] = None,
-        format_type: Optional[str] = None,
+        tags: list[str] | None = None,
+        language: str | None = None,
+        format_type: str | None = None,
     ) -> list[PromptRead]:
         """List prompts with optional filtering."""
         try:
@@ -268,7 +267,7 @@ class PromptBaseService:
 
 
 # Global service instance
-_prompt_base_service: Optional[PromptBaseService] = None
+_prompt_base_service: PromptBaseService | None = None
 
 
 def get_prompt_base_service() -> PromptBaseService:

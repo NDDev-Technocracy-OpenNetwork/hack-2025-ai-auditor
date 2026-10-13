@@ -1,7 +1,6 @@
 """Prompt-base API endpoints."""
 
 import logging
-from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Query
 
@@ -112,11 +111,11 @@ async def list_prompts(
     limit: int = Query(
         100, ge=1, le=1000, description="Maximum number of prompts to return"
     ),
-    tags: Optional[str] = Query(
+    tags: str | None = Query(
         None, description="Comma-separated list of tags to filter by"
     ),
-    language: Optional[str] = Query(None, description="Language code to filter by"),
-    format_type: Optional[str] = Query(None, description="Format type to filter by"),
+    language: str | None = Query(None, description="Language code to filter by"),
+    format_type: str | None = Query(None, description="Format type to filter by"),
 ):
     """
     List prompts in the prompt-base with optional filtering.

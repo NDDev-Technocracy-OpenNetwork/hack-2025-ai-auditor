@@ -1,7 +1,6 @@
 """Embeddings service for semantic analysis."""
 
 import logging
-from typing import List, Optional
 
 import numpy as np
 from openai import OpenAI
@@ -15,7 +14,7 @@ class EmbeddingsService:
     """Service for generating text embeddings using OpenAI."""
 
     def __init__(self):
-        self.client: Optional[OpenAI] = None
+        self.client: OpenAI | None = None
         self.model = "text-embedding-3-small"  # Efficient embedding model
 
     def _ensure_client(self):
@@ -25,7 +24,7 @@ class EmbeddingsService:
                 raise ValueError("OpenAI API key not configured")
             self.client = OpenAI(api_key=settings.openai_api_key)
 
-    def embed_text(self, text: str) -> List[float]:
+    def embed_text(self, text: str) -> list[float]:
         """Generate embedding for a single text."""
         try:
             self._ensure_client()
@@ -48,7 +47,7 @@ class EmbeddingsService:
             logger.error(f"Failed to generate embedding: {e}")
             raise
 
-    def embed_texts(self, texts: List[str]) -> List[List[float]]:
+    def embed_texts(self, texts: list[str]) -> list[list[float]]:
         """Generate embeddings for multiple texts in batch."""
         try:
             self._ensure_client()
@@ -85,7 +84,7 @@ class EmbeddingsService:
             logger.error(f"Failed to generate batch embeddings: {e}")
             raise
 
-    def cosine_similarity(self, a: List[float], b: List[float]) -> float:
+    def cosine_similarity(self, a: list[float], b: list[float]) -> float:
         """Calculate cosine similarity between two embeddings."""
         try:
             vec_a = np.array(a)
@@ -104,7 +103,7 @@ class EmbeddingsService:
             logger.error(f"Failed to calculate cosine similarity: {e}")
             return 0.0
 
-    def calculate_semantic_entropy(self, embeddings: List[List[float]]) -> dict:
+    def calculate_semantic_entropy(self, embeddings: list[list[float]]) -> dict:
         """Calculate semantic entropy metrics from embeddings."""
         try:
             if len(embeddings) < 2:
@@ -114,9 +113,6 @@ class EmbeddingsService:
                     "clusters": 1,
                     "avg_similarity": 1.0
                 }
-
-            # Convert to numpy array
-            embed_matrix = np.array(embeddings)
 
             # Calculate pairwise similarities
             similarities = []
@@ -158,7 +154,7 @@ class EmbeddingsService:
 
 
 # Global service instance
-_embeddings_service: Optional[EmbeddingsService] = None
+_embeddings_service: EmbeddingsService | None = None
 
 
 def get_embeddings_service() -> EmbeddingsService:

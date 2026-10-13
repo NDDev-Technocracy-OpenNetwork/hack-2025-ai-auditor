@@ -2,8 +2,9 @@ import os
 import sys
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import engine_from_config, pool
+
+from alembic import context
 
 # Add the app directory to the path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -12,7 +13,6 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from sqlmodel import SQLModel
 
 from app.core.config import settings
-from app.models.prompts import AnalysisResult, Prompt, PromptRelation
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

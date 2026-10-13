@@ -3,7 +3,6 @@
 import logging
 import re
 import xml.etree.ElementTree as ET
-from typing import List, Tuple
 
 from app.schemas.pipeline import PipelineState
 
@@ -101,7 +100,7 @@ def _detect_format(content: str) -> str:
     return "text"
 
 
-def _validate_format(content: str, format_type: str) -> Tuple[bool, List[str]]:
+def _validate_format(content: str, format_type: str) -> tuple[bool, list[str]]:
     """Validate content against its format."""
     errors = []
 
@@ -123,14 +122,13 @@ def _validate_format(content: str, format_type: str) -> Tuple[bool, List[str]]:
 
         # Check for malformed headers
         for i, line in enumerate(lines, 1):
-            if line.strip().startswith('#'):
-                if not re.match(r'^#{1,6}\s+.+', line.strip()):
-                    errors.append(f"Malformed header at line {i}: {line.strip()[:50]}")
+            if line.strip().startswith('#') and not re.match(r'^#{1,6}\s+.+', line.strip()):
+                errors.append(f"Malformed header at line {i}: {line.strip()[:50]}")
 
     return len(errors) == 0, errors
 
 
-def _fix_xml_markup(content: str) -> Tuple[str, List[str]]:
+def _fix_xml_markup(content: str) -> tuple[str, list[str]]:
     """Apply safe XML fixes."""
     fixes = []
     fixed_content = content
@@ -154,7 +152,7 @@ def _fix_xml_markup(content: str) -> Tuple[str, List[str]]:
     return fixed_content, fixes
 
 
-def _fix_markdown_markup(content: str) -> Tuple[str, List[str]]:
+def _fix_markdown_markup(content: str) -> tuple[str, list[str]]:
     """Apply safe Markdown fixes."""
     fixes = []
     lines = content.split('\n')

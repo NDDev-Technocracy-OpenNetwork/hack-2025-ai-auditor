@@ -2,8 +2,8 @@
   "schema_version": 1,
   "compiled_policy": {
     "repository_id": "repo_01KYVP7EMX2E59STGWA70VMQJG",
-    "bundle_version": "0.4.0-dev",
-    "digest": "sha256:07470f1f4b9d2422574cbb89757f8c5bb2b0d3330dc3a541d9195216389862ae"
+    "bundle_version": "0.9.7-dev",
+    "digest": "sha256:a4e81f8ece947cad982e68225af84d2bfd3ccabf5206db62e7aeb908af257b75"
   },
   "sources": [
     {
@@ -12,22 +12,23 @@
       "priority": 100,
       "distribution": "public",
       "path": "policies/base/repository-default.yaml",
-      "digest": "sha256:538f486d49620c169cbbac77745ce2ecc21010ebd4a564017c79cefbb468ca1e"
+      "digest": "sha256:0ea560cc2653184e07c6f744455f745a34f764a5c0dcda55f2dc76fa5296f2f0"
     },
     {
-      "id": "personal-default",
+      "id": "organization-default",
       "tier": "owner",
       "priority": 100,
       "distribution": "public",
-      "path": "policies/owners/personal-default.yaml",
-      "digest": "sha256:25d939880788c237ecffe8c4a87954e769a9b5e2624a55977f396a1cbfef0686"
+      "path": "policies/owners/organization-default.yaml",
+      "digest": "sha256:fe271769a3e50404a5073ca6d045ad19f784069e7d6fdceab80254c06781ed55"
     }
   ],
   "effective": {
     "agent": {
       "generated_projection_edit": "forbidden",
       "profiles": [
-        "core"
+        "core",
+        "drakkars"
       ]
     },
     "context": {
@@ -56,20 +57,18 @@
       },
       "merge": {
         "allow_auto_merge": {
-          "management": "managed",
-          "value": false
+          "management": "observed"
         },
         "allow_merge_commit": {
           "management": "managed",
-          "value": false
+          "value": true
         },
         "allow_rebase_merge": {
-          "management": "managed",
-          "value": false
+          "management": "observed"
         },
         "allow_squash_merge": {
           "management": "managed",
-          "value": true
+          "value": false
         },
         "allow_update_branch": {
           "management": "managed",
@@ -86,12 +85,10 @@
           "management": "observed"
         },
         "squash_merge_commit_message": {
-          "management": "managed",
-          "value": "PR_BODY"
+          "management": "observed"
         },
         "squash_merge_commit_title": {
-          "management": "managed",
-          "value": "PR_TITLE"
+          "management": "observed"
         }
       },
       "releases": {
@@ -117,24 +114,8 @@
       }
     },
     "package_management": {
-      "forbidden_executables": [
-        "pip",
-        "pipx",
-        "poetry",
-        "npm",
-        "npx",
-        "pnpm",
-        "yarn",
-        "corepack",
-        "mise",
-        "asdf"
-      ],
-      "language_dependency_managers": [
-        "uv",
-        "bun"
-      ],
       "mutable_version_resolution": "forbidden",
-      "npm_family_on_managed_path": "forbidden",
+      "npm_family_on_managed_path": "allowed",
       "remote_stream_to_shell": "forbidden"
     },
     "rollout": {
@@ -155,6 +136,13 @@
       "operation": "set"
     },
     "/effective/agent/profiles/0": {
+      "source": "repository-default",
+      "tier": "base",
+      "priority": 100,
+      "file": "policies/base/repository-default.yaml",
+      "operation": "append"
+    },
+    "/effective/agent/profiles/1": {
       "source": "repository-default",
       "tier": "base",
       "priority": 100,
@@ -231,13 +219,6 @@
       "file": "policies/base/repository-default.yaml",
       "operation": "set"
     },
-    "/effective/github/merge/allow_auto_merge/value": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
     "/effective/github/merge/allow_merge_commit/management": {
       "source": "repository-default",
       "tier": "base",
@@ -253,13 +234,6 @@
       "operation": "set"
     },
     "/effective/github/merge/allow_rebase_merge/management": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/github/merge/allow_rebase_merge/value": {
       "source": "repository-default",
       "tier": "base",
       "priority": 100,
@@ -329,21 +303,7 @@
       "file": "policies/base/repository-default.yaml",
       "operation": "set"
     },
-    "/effective/github/merge/squash_merge_commit_message/value": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
     "/effective/github/merge/squash_merge_commit_title/management": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/github/merge/squash_merge_commit_title/value": {
       "source": "repository-default",
       "tier": "base",
       "priority": 100,
@@ -399,90 +359,6 @@
       "file": "policies/base/repository-default.yaml",
       "operation": "set"
     },
-    "/effective/package_management/forbidden_executables/0": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/1": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/2": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/3": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/4": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/5": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/6": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/7": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/8": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/forbidden_executables/9": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/language_dependency_managers/0": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
-    "/effective/package_management/language_dependency_managers/1": {
-      "source": "repository-default",
-      "tier": "base",
-      "priority": 100,
-      "file": "policies/base/repository-default.yaml",
-      "operation": "set"
-    },
     "/effective/package_management/mutable_version_resolution": {
       "source": "repository-default",
       "tier": "base",
@@ -505,10 +381,10 @@
       "operation": "set"
     },
     "/effective/rollout/mode": {
-      "source": "personal-default",
+      "source": "organization-default",
       "tier": "owner",
       "priority": 100,
-      "file": "policies/owners/personal-default.yaml",
+      "file": "policies/owners/organization-default.yaml",
       "operation": "set"
     },
     "/effective/security/external_write_requires_approval": {
