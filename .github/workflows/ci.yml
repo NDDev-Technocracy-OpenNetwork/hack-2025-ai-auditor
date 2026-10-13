@@ -18,7 +18,7 @@ jobs:
       uv_version: "0.12.23"
       python_version: '3.11'
       working_directory: backend
-      install_command: 'uv venv --python 3.11 .venv && uv pip install --python .venv/bin/python -r requirements.txt ruff pytest'
+      install_command: 'uv pip install -r requirements.txt ruff pytest'
       test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
 
   frontend:
