@@ -3,7 +3,6 @@
 import logging
 import re
 from collections import Counter
-from typing import Dict, List, Tuple
 
 from app.schemas.pipeline import PipelineState
 
@@ -33,7 +32,7 @@ async def vocab_unify_node(state: PipelineState) -> PipelineState:
         return state
 
 
-def _unify_vocabulary(content: str) -> Tuple[str, List[str]]:
+def _unify_vocabulary(content: str) -> tuple[str, list[str]]:
     """Apply safe vocabulary unifications."""
     changes = []
     unified_content = content
@@ -136,7 +135,7 @@ def _unify_vocabulary(content: str) -> Tuple[str, List[str]]:
     return unified_content, changes
 
 
-def _analyze_vocabulary_complexity(content: str) -> Dict[str, float]:
+def _analyze_vocabulary_complexity(content: str) -> dict[str, float]:
     """Analyze vocabulary complexity metrics."""
     words = re.findall(r'\\b\\w+\\b', content.lower())
 

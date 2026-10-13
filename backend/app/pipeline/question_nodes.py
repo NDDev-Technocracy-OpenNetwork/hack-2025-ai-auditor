@@ -1,7 +1,7 @@
 """Clarification question generation pipeline node."""
 
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from app.schemas.pipeline import PipelineState
 from app.schemas.prompts import ClarifyQuestion
@@ -53,7 +53,7 @@ async def build_questions_node(state: PipelineState) -> PipelineState:
         return state
 
 
-async def _generate_contradiction_questions(contradictions: List[Dict[str, Any]]) -> List[ClarifyQuestion]:
+async def _generate_contradiction_questions(contradictions: list[dict[str, Any]]) -> list[ClarifyQuestion]:
     """Generate questions to resolve contradictions."""
     questions = []
 
@@ -97,7 +97,7 @@ Provide just the question (one sentence):"""
     return questions
 
 
-async def _generate_ambiguity_questions(content: str, entropy: float) -> List[ClarifyQuestion]:
+async def _generate_ambiguity_questions(content: str, entropy: float) -> list[ClarifyQuestion]:
     """Generate questions about ambiguous parts."""
     questions = []
 
@@ -137,7 +137,7 @@ Format:
     return questions
 
 
-async def _generate_detail_questions(content: str, judge_score: float, reasoning: str) -> List[ClarifyQuestion]:
+async def _generate_detail_questions(content: str, judge_score: float, reasoning: str) -> list[ClarifyQuestion]:
     """Generate questions about missing details."""
     questions = []
 
@@ -176,7 +176,7 @@ Format:
     return questions
 
 
-async def _generate_general_questions(content: str) -> List[ClarifyQuestion]:
+async def _generate_general_questions(content: str) -> list[ClarifyQuestion]:
     """Generate general clarification questions."""
     questions = []
 
@@ -235,7 +235,7 @@ Generate practical questions that would lead to actionable improvements:"""
     return questions
 
 
-def _parse_numbered_questions(text: str) -> List[str]:
+def _parse_numbered_questions(text: str) -> list[str]:
     """Parse numbered questions from text."""
     import re
 

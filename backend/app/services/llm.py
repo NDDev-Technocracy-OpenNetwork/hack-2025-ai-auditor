@@ -1,5 +1,5 @@
 import logging
-from typing import List, Literal
+from typing import Literal
 
 from openai import OpenAI
 
@@ -49,7 +49,7 @@ class OpenAIService:
             result = response.choices[0].message.content
 
             logger.info(
-                f"OpenAI request completed",
+                "OpenAI request completed",
                 extra={
                     "model": model,
                     "tier": model_tier,
@@ -72,7 +72,7 @@ class OpenAIService:
             )
             raise
 
-    async def sample_for_entropy(self, prompt: str, n: int = None) -> List[str]:
+    async def sample_for_entropy(self, prompt: str, n: int = None) -> list[str]:
         """
         Generate multiple responses for semantic entropy analysis.
         Uses cheap model for cost efficiency.
@@ -98,7 +98,7 @@ class OpenAIService:
             results = [choice.message.content or "" for choice in response.choices]
 
             logger.info(
-                f"Entropy sampling completed",
+                "Entropy sampling completed",
                 extra={
                     "model": self.models["cheap"],
                     "samples": n,

@@ -1,7 +1,7 @@
 """Pipeline state and node contracts for LangGraph."""
 
 from datetime import datetime
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -16,45 +16,45 @@ class PipelineState(BaseModel):
     format_type: Literal["auto", "markdown", "xml", "text"] = Field(default="text")
 
     # Language processing
-    detected_language: Optional[str] = None
+    detected_language: str | None = None
     translated: bool = False
-    translated_content: Optional[str] = None
+    translated_content: str | None = None
 
     # Format validation
     format_valid: bool = False
-    markup_fixes: List[str] = Field(default_factory=list)
+    markup_fixes: list[str] = Field(default_factory=list)
 
     # Vocabulary analysis
     vocab_unified: bool = False
-    vocab_changes: List[str] = Field(default_factory=list)
+    vocab_changes: list[str] = Field(default_factory=list)
 
     # Contradiction detection
-    contradictions: List[Dict[str, Any]] = Field(default_factory=list)
+    contradictions: list[dict[str, Any]] = Field(default_factory=list)
 
     # Semantic entropy
-    semantic_samples: List[str] = Field(default_factory=list)
-    semantic_embeddings: List[List[float]] = Field(default_factory=list)
-    entropy_score: Optional[float] = None
-    entropy_spread: Optional[float] = None
-    entropy_clusters: Optional[int] = None
+    semantic_samples: list[str] = Field(default_factory=list)
+    semantic_embeddings: list[list[float]] = Field(default_factory=list)
+    entropy_score: float | None = None
+    entropy_spread: float | None = None
+    entropy_clusters: int | None = None
 
     # LLM Judge scoring
-    llm_judge_score: Optional[float] = None
-    llm_judge_reasoning: Optional[str] = None
+    llm_judge_score: float | None = None
+    llm_judge_reasoning: str | None = None
 
     # Patches and improvements
-    patches: List[Patch] = Field(default_factory=list)
+    patches: list[Patch] = Field(default_factory=list)
 
     # Clarification questions
-    clarify_questions: List[ClarifyQuestion] = Field(default_factory=list)
+    clarify_questions: list[ClarifyQuestion] = Field(default_factory=list)
 
     # Metadata
     processing_started: datetime = Field(default_factory=datetime.utcnow)
-    processing_completed: Optional[datetime] = None
-    errors: List[str] = Field(default_factory=list)
+    processing_completed: datetime | None = None
+    errors: list[str] = Field(default_factory=list)
 
     # Working content (may change during processing)
-    working_content: Optional[str] = None
+    working_content: str | None = None
 
     def get_current_content(self) -> str:
         """Get the current working content or original if no working version."""
@@ -118,9 +118,9 @@ class NodeResult(BaseModel):
     """Result from a pipeline node execution."""
 
     success: bool = True
-    message: Optional[str] = None
-    data: Optional[Dict[str, Any]] = None
-    next_node: Optional[str] = None  # For conditional routing
+    message: str | None = None
+    data: dict[str, Any] | None = None
+    next_node: str | None = None  # For conditional routing
 
 
 class LanguageDetectionResult(BaseModel):
@@ -143,23 +143,23 @@ class FormatValidationResult(BaseModel):
     """Result from format validation node."""
 
     is_valid: bool = Field(..., description="Whether format is valid")
-    errors: List[str] = Field(default_factory=list)
-    suggested_fixes: List[str] = Field(default_factory=list)
-    corrected_content: Optional[str] = None
+    errors: list[str] = Field(default_factory=list)
+    suggested_fixes: list[str] = Field(default_factory=list)
+    corrected_content: str | None = None
 
 
 class VocabularyResult(BaseModel):
     """Result from vocabulary unification node."""
 
     unified_content: str = Field(..., description="Content with unified vocabulary")
-    changes_made: List[str] = Field(default_factory=list)
+    changes_made: list[str] = Field(default_factory=list)
     vocabulary_score: float = Field(default=1.0, ge=0.0, le=1.0)
 
 
 class ContradictionResult(BaseModel):
     """Result from contradiction detection node."""
 
-    contradictions_found: List[Dict[str, Any]] = Field(default_factory=list)
+    contradictions_found: list[dict[str, Any]] = Field(default_factory=list)
     contradiction_score: float = Field(default=0.0, ge=0.0, le=1.0)
     severity: Literal["none", "minor", "major", "critical"] = "none"
 
@@ -187,7 +187,7 @@ class JudgeScoreResult(BaseModel):
 class PatchGenerationResult(BaseModel):
     """Result from patch generation node."""
 
-    patches: List[Patch] = Field(default_factory=list)
+    patches: list[Patch] = Field(default_factory=list)
     safe_patches_count: int = Field(default=0, ge=0)
     risky_patches_count: int = Field(default=0, ge=0)
 
@@ -195,6 +195,6 @@ class PatchGenerationResult(BaseModel):
 class QuestionGenerationResult(BaseModel):
     """Result from clarification question generation node."""
 
-    questions: List[ClarifyQuestion] = Field(default_factory=list)
-    priority_questions: List[str] = Field(default_factory=list)
-    question_categories: List[str] = Field(default_factory=list)
+    questions: list[ClarifyQuestion] = Field(default_factory=list)
+    priority_questions: list[str] = Field(default_factory=list)
+    question_categories: list[str] = Field(default_factory=list)

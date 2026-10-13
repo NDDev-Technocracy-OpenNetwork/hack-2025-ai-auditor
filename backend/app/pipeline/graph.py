@@ -2,7 +2,7 @@
 
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from langgraph.graph import END, StateGraph
 
@@ -143,7 +143,7 @@ class AnalysisPipeline:
         self,
         prompt_content: str,
         format_type: str = "text",
-        context: Dict[str, Any] = None
+        context: dict[str, Any] = None  # noqa: ARG002 - reserved public compatibility parameter
     ) -> PipelineState:
         """Run analysis with additional context."""
 

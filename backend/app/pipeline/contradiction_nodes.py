@@ -2,7 +2,7 @@
 
 import logging
 import re
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 from app.schemas.pipeline import PipelineState
 from app.services.llm import get_llm_service
@@ -32,7 +32,7 @@ async def find_contradictions_node(state: PipelineState) -> PipelineState:
         return state
 
 
-async def _find_intra_prompt_contradictions(content: str) -> List[Dict[str, Any]]:
+async def _find_intra_prompt_contradictions(content: str) -> list[dict[str, Any]]:
     """Find contradictions within a single prompt."""
 
     # Split content into sentences for analysis
@@ -55,7 +55,7 @@ async def _find_intra_prompt_contradictions(content: str) -> List[Dict[str, Any]
     return contradictions
 
 
-def _split_into_sentences(content: str) -> List[str]:
+def _split_into_sentences(content: str) -> list[str]:
     """Split content into sentences."""
     # Simple sentence splitting
     sentences = re.split(r'[.!?]+', content)
@@ -70,7 +70,7 @@ def _split_into_sentences(content: str) -> List[str]:
     return cleaned_sentences
 
 
-def _detect_pattern_contradictions(sentences: List[str]) -> List[Dict[str, Any]]:
+def _detect_pattern_contradictions(sentences: list[str]) -> list[dict[str, Any]]:
     """Detect contradictions using pattern matching."""
     contradictions = []
 
@@ -130,7 +130,7 @@ def _detect_pattern_contradictions(sentences: List[str]) -> List[Dict[str, Any]]
     return contradictions
 
 
-async def _detect_semantic_contradictions(sentences: List[str]) -> List[Dict[str, Any]]:
+async def _detect_semantic_contradictions(sentences: list[str]) -> list[dict[str, Any]]:
     """Use LLM to detect semantic contradictions."""
     contradictions = []
 
@@ -193,7 +193,7 @@ Format: YES/NO/MAYBE: [explanation if needed]"""
     return contradictions
 
 
-def _calculate_contradiction_score(contradictions: List[Dict[str, Any]]) -> float:
+def _calculate_contradiction_score(contradictions: list[dict[str, Any]]) -> float:
     """Calculate overall contradiction score."""
     if not contradictions:
         return 0.0

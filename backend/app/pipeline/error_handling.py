@@ -2,8 +2,9 @@
 
 import asyncio
 import logging
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional, TypeVar
+from typing import TypeVar
 
 from app.schemas.pipeline import PipelineState
 
@@ -123,11 +124,7 @@ class PipelineErrorHandler:
             return False
 
         # If too many total errors, stop
-        if self.total_errors >= 5:
-            return False
-
-        # Continue for most other errors
-        return True
+        return self.total_errors < 5
 
     def get_error_summary(self) -> dict:
         """Get a summary of all errors encountered."""
@@ -139,7 +136,7 @@ class PipelineErrorHandler:
 
 
 # Global error handler instance
-_pipeline_error_handler: Optional[PipelineErrorHandler] = None
+_pipeline_error_handler: PipelineErrorHandler | None = None
 
 
 def get_pipeline_error_handler() -> PipelineErrorHandler:

@@ -237,10 +237,10 @@ async def process_clarification(request: ClarifyRequest):
 
     # Build context from clarification answers
     clarification_context = _build_clarification_context(request.answers)
-    
+
     # Create enhanced prompt with clarification context
     enhanced_prompt = f"{original_prompt}\n\nClarifications:\n{clarification_context}"
-    
+
     logger.info(
         f"Re-analyzing prompt {request.prompt_id} with {len(request.answers)} clarification answers"
     )
@@ -359,13 +359,13 @@ def _build_clarification_context(answers: list[ClarifyAnswer]) -> str:
     """Build context string from clarification answers."""
     if not answers:
         return "No clarifications provided."
-    
+
     context_lines = []
     for answer in answers:
         context_lines.append(f"Q: {answer.question_id}")
         context_lines.append(f"A: {answer.answer}")
         context_lines.append("")  # Empty line for readability
-    
+
     return "\n".join(context_lines)
 
 
@@ -376,14 +376,14 @@ async def export_prompt(prompt_id: str, format_type: str):
     """
     if format_type not in ["md", "xml"]:
         raise HTTPException(status_code=400, detail="Format must be 'md' or 'xml'")
-    
+
     if prompt_id not in analysis_cache:
         raise HTTPException(status_code=404, detail="Prompt analysis not found")
-    
+
     cached_data = analysis_cache[prompt_id]
     report = cached_data["report"]
     patches = cached_data["patches"]
-    
+
     try:
         if format_type == "md":
             content = _export_as_markdown(report, patches)
@@ -393,15 +393,15 @@ async def export_prompt(prompt_id: str, format_type: str):
             content = _export_as_xml(report, patches)
             media_type = "application/xml"
             filename = f"prompt-analysis-{prompt_id}.xml"
-        
+
         from fastapi.responses import Response
-        
+
         return Response(
             content=content,
             media_type=media_type,
             headers={"Content-Disposition": f"attachment; filename={filename}"}
         )
-        
+
     except Exception as e:
         logger.error(f"Export failed for {prompt_id}: {e}")
         raise HTTPException(status_code=500, detail="Export failed")
@@ -414,11 +414,11 @@ async def download_report(prompt_id: str):
     """
     if prompt_id not in analysis_cache:
         raise HTTPException(status_code=404, detail="Prompt analysis not found")
-    
+
     cached_data = analysis_cache[prompt_id]
-    
+
     from fastapi.responses import JSONResponse
-    
+
     return JSONResponse(
         content={
             "report": cached_data["report"].model_dump(mode="json"),
@@ -433,124 +433,124 @@ async def download_report(prompt_id: str):
 def _export_as_markdown(report, patches: list[Patch]) -> str:
     """Export analysis as Markdown format."""
     lines = []
-    
+
     # Header
-    lines.append(f"# Prompt Analysis Report")
-    lines.append(f"")
+    lines.append("# Prompt Analysis Report")
+    lines.append("")
     lines.append(f"**Analyzed At:** {report.analyzed_at}")
     lines.append(f"**Language:** {report.detected_language}")
     lines.append(f"**Overall Score:** {report.overall_score:.1f}/10")
-    lines.append(f"")
-    
+    lines.append("")
+
     # Original Prompt
-    lines.append(f"## Original Prompt")
-    lines.append(f"")
-    lines.append(f"```")
+    lines.append("## Original Prompt")
+    lines.append("")
+    lines.append("```")
     lines.append(report.original_prompt)
-    lines.append(f"```")
-    lines.append(f"")
-    
+    lines.append("```")
+    lines.append("")
+
     # Metrics
-    lines.append(f"## Analysis Metrics")
-    lines.append(f"")
+    lines.append("## Analysis Metrics")
+    lines.append("")
     lines.append(f"- **Judge Score:** {report.judge_score.score:.1f}/10")
     lines.append(f"- **Semantic Entropy:** {report.semantic_entropy.entropy:.3f}")
     lines.append(f"- **Clusters:** {report.semantic_entropy.clusters}")
     lines.append(f"- **Length:** {report.length_words} words, {report.length_chars} characters")
     lines.append(f"- **Complexity:** {report.complexity_score:.1f}/10")
-    lines.append(f"")
-    
+    lines.append("")
+
     # Contradictions
     if report.contradictions:
-        lines.append(f"## Contradictions Detected")
-        lines.append(f"")
+        lines.append("## Contradictions Detected")
+        lines.append("")
         for i, contradiction in enumerate(report.contradictions, 1):
             lines.append(f"{i}. **{contradiction.severity.upper()}:** {contradiction.description}")
-        lines.append(f"")
-    
+        lines.append("")
+
     # Improvement Patches
     if patches:
-        lines.append(f"## Suggested Improvements")
-        lines.append(f"")
-        
+        lines.append("## Suggested Improvements")
+        lines.append("")
+
         safe_patches = [p for p in patches if p.type == "safe"]
         risky_patches = [p for p in patches if p.type == "risky"]
-        
+
         if safe_patches:
-            lines.append(f"### Safe Improvements")
-            lines.append(f"")
+            lines.append("### Safe Improvements")
+            lines.append("")
             for patch in safe_patches:
                 lines.append(f"- **{patch.category.title()}:** {patch.description}")
                 lines.append(f"  - *Confidence:* {patch.confidence:.0%}")
                 lines.append(f"  - *Rationale:* {patch.rationale}")
-                lines.append(f"")
-        
+                lines.append("")
+
         if risky_patches:
-            lines.append(f"### Advanced Improvements (Review Required)")
-            lines.append(f"")
+            lines.append("### Advanced Improvements (Review Required)")
+            lines.append("")
             for patch in risky_patches:
                 lines.append(f"- **{patch.category.title()}:** {patch.description}")
                 lines.append(f"  - *Confidence:* {patch.confidence:.0%}")
                 lines.append(f"  - *Rationale:* {patch.rationale}")
-                lines.append(f"")
-    
+                lines.append("")
+
     # Judge Feedback
-    lines.append(f"## Judge Feedback")
-    lines.append(f"")
+    lines.append("## Judge Feedback")
+    lines.append("")
     lines.append(report.judge_score.rationale)
-    lines.append(f"")
-    
+    lines.append("")
+
     # Generated by
-    lines.append(f"---")
-    lines.append(f"*Generated by Curestry AI Prompt Analysis System*")
-    
+    lines.append("---")
+    lines.append("*Generated by Curestry AI Prompt Analysis System*")
+
     return "\n".join(lines)
 
 
 def _export_as_xml(report, patches: list[Patch]) -> str:
     """Export analysis as XML format."""
     lines = []
-    
+
     lines.append('<?xml version="1.0" encoding="UTF-8"?>')
     lines.append('<prompt-analysis>')
-    lines.append(f'  <metadata>')
+    lines.append('  <metadata>')
     lines.append(f'    <prompt-id>{report.prompt_id}</prompt-id>')
     lines.append(f'    <analyzed-at>{report.analyzed_at}</analyzed-at>')
     lines.append(f'    <language>{report.detected_language}</language>')
     lines.append(f'    <overall-score>{report.overall_score:.1f}</overall-score>')
-    lines.append(f'  </metadata>')
+    lines.append('  </metadata>')
     lines.append('')
-    
+
     # Original prompt
-    lines.append(f'  <original-prompt>')
+    lines.append('  <original-prompt>')
     lines.append(f'    <![CDATA[{report.original_prompt}]]>')
-    lines.append(f'  </original-prompt>')
+    lines.append('  </original-prompt>')
     lines.append('')
-    
+
     # Metrics
-    lines.append(f'  <metrics>')
+    lines.append('  <metrics>')
     lines.append(f'    <judge-score>{report.judge_score.score:.1f}</judge-score>')
     lines.append(f'    <semantic-entropy>{report.semantic_entropy.entropy:.3f}</semantic-entropy>')
     lines.append(f'    <clusters>{report.semantic_entropy.clusters}</clusters>')
     lines.append(f'    <length-words>{report.length_words}</length-words>')
     lines.append(f'    <length-chars>{report.length_chars}</length-chars>')
     lines.append(f'    <complexity>{report.complexity_score:.1f}</complexity>')
-    lines.append(f'  </metrics>')
+    lines.append('  </metrics>')
     lines.append('')
-    
+
     # Contradictions
     if report.contradictions:
-        lines.append(f'  <contradictions>')
+        lines.append('  <contradictions>')
         for contradiction in report.contradictions:
             lines.append(f'    <contradiction type="{contradiction.type}" severity="{contradiction.severity}">')
             lines.append(f'      <description><![CDATA[{contradiction.description}]]></description>')
-            lines.append(f'    </contradiction>')
-        lines.append(f'  </contradictions>')
+            lines.append('    </contradiction>')
+        lines.append('  </contradictions>')
         lines.append('')
-    
+
     # Patches
     if patches:
-        lines.append(f'  <improvements>')
+        lines.append('  <improvements>')
         for patch in patches:
             lines.append(f'    <patch id="{patch.id}" type="{patch.type}" category="{patch.category}">')
             lines.append(f'      <description><![CDATA[{patch.description}]]></description>')
@@ -558,15 +558,15 @@ def _export_as_xml(report, patches: list[Patch]) -> str:
             lines.append(f'      <improved><![CDATA[{patch.improved}]]></improved>')
             lines.append(f'      <rationale><![CDATA[{patch.rationale}]]></rationale>')
             lines.append(f'      <confidence>{patch.confidence:.2f}</confidence>')
-            lines.append(f'    </patch>')
-        lines.append(f'  </improvements>')
+            lines.append('    </patch>')
+        lines.append('  </improvements>')
         lines.append('')
-    
+
     # Judge feedback
-    lines.append(f'  <judge-feedback>')
+    lines.append('  <judge-feedback>')
     lines.append(f'    <![CDATA[{report.judge_score.rationale}]]>')
-    lines.append(f'  </judge-feedback>')
-    
+    lines.append('  </judge-feedback>')
+
     lines.append('</prompt-analysis>')
-    
+
     return "\n".join(lines)

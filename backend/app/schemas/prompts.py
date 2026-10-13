@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -11,11 +11,11 @@ class PromptInput(BaseModel):
     format_type: Literal["auto", "xml", "markdown"] = Field(
         default="auto", description="Expected format of the prompt"
     )
-    language: Optional[str] = Field(
+    language: str | None = Field(
         default=None,
         description="Language of the prompt (auto-detected if not provided)",
     )
-    metadata: Optional[dict[str, Any]] = Field(
+    metadata: dict[str, Any] | None = Field(
         default_factory=dict, description="Additional metadata about the prompt"
     )
 
@@ -25,7 +25,7 @@ class MetricScore(BaseModel):
 
     score: float = Field(..., ge=0, le=10, description="Score from 0-10")
     rationale: str = Field(..., description="Brief explanation of the score")
-    details: Optional[dict[str, Any]] = Field(
+    details: dict[str, Any] | None = Field(
         default_factory=dict, description="Additional metric-specific details"
     )
 

@@ -2,7 +2,6 @@
 
 import asyncio
 import logging
-from typing import List
 
 from app.core.config import settings
 from app.schemas.pipeline import PipelineState
@@ -53,7 +52,7 @@ async def semantic_entropy_node(state: PipelineState) -> PipelineState:
         return state
 
 
-async def _generate_semantic_samples(content: str, n_samples: int) -> List[str]:
+async def _generate_semantic_samples(content: str, n_samples: int) -> list[str]:
     """Generate n different interpretations/responses to the prompt."""
     try:
         llm = get_llm_service()
@@ -94,7 +93,7 @@ Format as numbered list:
         return [content] * n_samples
 
 
-async def _generate_samples_individually(content: str, n_samples: int) -> List[str]:
+async def _generate_samples_individually(content: str, n_samples: int) -> list[str]:
     """Generate samples one by one if batch generation fails."""
     samples = []
 
@@ -136,7 +135,7 @@ async def _generate_samples_individually(content: str, n_samples: int) -> List[s
     return samples
 
 
-def _parse_numbered_list(text: str) -> List[str]:
+def _parse_numbered_list(text: str) -> list[str]:
     """Parse a numbered list from LLM response."""
     import re
 

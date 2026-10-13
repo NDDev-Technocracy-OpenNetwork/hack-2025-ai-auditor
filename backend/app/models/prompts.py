@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from sqlalchemy import Text
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel
@@ -10,18 +10,18 @@ class PromptBase(SQLModel):
     """Base class for Prompt model."""
 
     name: str = Field(max_length=255, description="Prompt name/title")
-    description: Optional[str] = Field(default=None, description="Prompt description")
+    description: str | None = Field(default=None, description="Prompt description")
     content: str = Field(sa_column=Column(Text), description="The prompt text")
     format_type: str = Field(
         default="auto", max_length=50, description="Prompt format (auto/xml/markdown)"
     )
     language: str = Field(default="en", max_length=10, description="Prompt language")
-    tags: Optional[list[str]] = Field(
+    tags: list[str] | None = Field(
         default_factory=list,
         sa_column=Column(JSON),
         description="Tags for categorization",
     )
-    extra_metadata: Optional[dict[str, Any]] = Field(
+    extra_metadata: dict[str, Any] | None = Field(
         default_factory=dict, sa_column=Column(JSON), description="Additional metadata"
     )
     created_at: datetime = Field(
@@ -37,7 +37,7 @@ class Prompt(PromptBase, table=True):
 
     __tablename__ = "prompts"
 
-    id: Optional[str] = Field(
+    id: str | None = Field(
         default_factory=lambda: str(uuid.uuid4()),
         primary_key=True,
         description="Unique prompt identifier",
@@ -72,13 +72,13 @@ class PromptRead(PromptBase):
 class PromptUpdate(SQLModel):
     """Schema for updating a prompt."""
 
-    name: Optional[str] = None
-    description: Optional[str] = None
-    content: Optional[str] = None
-    format_type: Optional[str] = None
-    language: Optional[str] = None
-    tags: Optional[list[str]] = None
-    extra_metadata: Optional[dict[str, Any]] = None
+    name: str | None = None
+    description: str | None = None
+    content: str | None = None
+    format_type: str | None = None
+    language: str | None = None
+    tags: list[str] | None = None
+    extra_metadata: dict[str, Any] | None = None
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -89,10 +89,10 @@ class PromptRelationBase(SQLModel):
         max_length=50,
         description="Relationship type: depends_on, overrides, conflicts_with",
     )
-    description: Optional[str] = Field(
+    description: str | None = Field(
         default=None, description="Description of the relationship"
     )
-    extra_metadata: Optional[dict[str, Any]] = Field(
+    extra_metadata: dict[str, Any] | None = Field(
         default_factory=dict, sa_column=Column(JSON)
     )
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -103,7 +103,7 @@ class PromptRelation(PromptRelationBase, table=True):
 
     __tablename__ = "prompt_relations"
 
-    id: Optional[str] = Field(
+    id: str | None = Field(
         default_factory=lambda: str(uuid.uuid4()), primary_key=True
     )
     source_id: str = Field(foreign_key="prompts.id", description="Source prompt ID")
@@ -157,18 +157,18 @@ class AnalysisResultBase(SQLModel):
     length_words: int = Field(description="Word count")
 
     # Analysis data
-    contradictions: Optional[list[dict[str, Any]]] = Field(
+    contradictions: list[dict[str, Any]] | None = Field(
         default_factory=list, sa_column=Column(JSON)
     )
-    patches: Optional[list[dict[str, Any]]] = Field(
+    patches: list[dict[str, Any]] | None = Field(
         default_factory=list, sa_column=Column(JSON)
     )
-    clarify_questions: Optional[list[dict[str, Any]]] = Field(
+    clarify_questions: list[dict[str, Any]] | None = Field(
         default_factory=list, sa_column=Column(JSON)
     )
 
     # Metadata
-    analysis_extra_metadata: Optional[dict[str, Any]] = Field(
+    analysis_extra_metadata: dict[str, Any] | None = Field(
         default_factory=dict, sa_column=Column(JSON)
     )
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -179,28 +179,28 @@ class AnalysisResult(AnalysisResultBase, table=True):
 
     __tablename__ = "analysis_results"
 
-    id: Optional[str] = Field(
+    id: str | None = Field(
         default_factory=lambda: str(uuid.uuid4()), primary_key=True
     )
-    prompt_id: Optional[str] = Field(
+    prompt_id: str | None = Field(
         foreign_key="prompts.id", description="Associated prompt ID (if stored)"
     )
 
     # Relationships
-    prompt: Optional[Prompt] = Relationship(back_populates="analyses")
+    prompt: Prompt | None = Relationship(back_populates="analyses")
 
 
 class AnalysisResultCreate(AnalysisResultBase):
     """Schema for creating an analysis result."""
 
-    prompt_id: Optional[str] = None
+    prompt_id: str | None = None
 
 
 class AnalysisResultRead(AnalysisResultBase):
     """Schema for reading an analysis result."""
 
     id: str
-    prompt_id: Optional[str]
+    prompt_id: str | None
     created_at: datetime
 
 

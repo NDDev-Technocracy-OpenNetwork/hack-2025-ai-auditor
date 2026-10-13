@@ -13,40 +13,44 @@ concurrency:
 jobs:
   backend:
     name: backend (python)
-    uses: NDDev-it-com/ci-workflows/.github/workflows/python-ci.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/python-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
+      uv_version: "0.12.23"
       python_version: '3.11'
       working_directory: backend
-      install_command: 'uv pip install --system -r requirements.txt ruff pytest'
-      test_command: 'ruff check . && python -m pytest -q'
+      install_command: 'uv venv --python 3.11 .venv && uv pip install --python .venv/bin/python -r requirements.txt ruff pytest'
+      test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
 
   frontend:
     name: frontend (node)
-    uses: NDDev-it-com/ci-workflows/.github/workflows/node-ci.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/node-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
+      package_manager: npm
+      node_version: "24.21.0"
+      npm_version: "11.19.0"
       working_directory: frontend
       install_command: 'npm ci --no-audit'
-      test_command: 'npm run lint && npm run build'
+      test_command: ".venv/bin/ruff check . && .venv/bin/python -m pytest -q"
 
   codeql:
-    uses: NDDev-it-com/ci-workflows/.github/workflows/public-codeql.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-codeql.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
       languages: '["python","javascript","actions"]'
 
   scorecard:
-    uses: NDDev-it-com/ci-workflows/.github/workflows/public-scorecard.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-scorecard.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   dependency-review:
-    uses: NDDev-it-com/ci-workflows/.github/workflows/public-dependency-review.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-dependency-review.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   zizmor:
-    uses: NDDev-it-com/ci-workflows/.github/workflows/zizmor-sarif.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/zizmor-sarif.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   secret-scan:
-    uses: NDDev-it-com/ci-workflows/.github/workflows/secret-scan.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/secret-scan.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   actionlint:
-    uses: NDDev-it-com/ci-workflows/.github/workflows/actionlint.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/actionlint.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   semgrep:
-    uses: NDDev-it-com/ci-workflows/.github/workflows/semgrep-ci.yml@b05016e27151e2d5b3f07e1d856fff50f635ab15
+    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/semgrep-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
