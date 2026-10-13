@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: read
     name: backend (python)
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/python-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/python-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
       uv_version: "0.12.23"
       python_version: '3.11'
@@ -29,7 +29,7 @@ jobs:
     permissions:
       contents: read
     name: frontend (node)
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/node-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/node-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
       package_manager: npm
       node_version: "24.21.0"
@@ -43,7 +43,7 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-codeql.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/public-codeql.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
     with:
       languages: '["python","javascript","actions"]'
 
@@ -54,33 +54,33 @@ jobs:
       id-token: write
       contents: read
       actions: read
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-scorecard.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/public-scorecard.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   dependency-review:
     if: github.event_name == 'pull_request'
     permissions:
       contents: read
       pull-requests: write
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/public-dependency-review.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/public-dependency-review.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   zizmor:
     permissions:
       actions: read
       contents: read
       security-events: write
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/zizmor-sarif.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/zizmor-sarif.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   secret-scan:
     permissions:
       contents: read
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/secret-scan.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/secret-scan.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   actionlint:
     permissions:
       contents: read
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/actionlint.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/actionlint.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
 
   semgrep:
     permissions:
       contents: read
-    uses: NDDev-Technocracy-OpenNetwork/ci-workflows/.github/workflows/semgrep-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
+    uses: NDDev-Technocracy-Archive/ci-workflows-20261014/.github/workflows/semgrep-ci.yml@93eeb2a65e98a29e9dbff7909f67c6419abff046
